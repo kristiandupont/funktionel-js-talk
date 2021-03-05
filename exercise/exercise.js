@@ -34,13 +34,11 @@ for (let i = 0; i < data.length; i++) {
 
 
 // Deklarativ implementation med Ramda:
-const indexToArray = f => R.reduce((acc, elem) => R.assoc(f(elem), R.append(elem, acc[f(elem)]), acc), {})
-
 const getCompanyName = user => user.company_name || user.email && R.split('@')(user.email)[1];
 const getFullName = user => `${user.first_name} ${user.last_name}`
 
 R.pipe(
-  indexToArray(getCompanyName),
+  R.groupBy(getCompanyName),
   R.map((people) => ({
     employees: R.map(getFullName, people),
     genders: R.countBy(R.prop('gender'), people),
